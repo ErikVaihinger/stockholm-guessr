@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stockholm Guessr · Host</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Stockholm <b>Guessr</b> · Host</div>
+    <span class="status" id="status">connecting</span>
+    <div class="spacer"></div>
+    <button class="btn small" id="btnScores">Scores</button>
+    <button class="btn small" id="btnNewGame">New game</button>
+  </div>
+  <div class="banner hidden" id="banner"></div>
+
+  <!-- Lobby -->
+  <section class="screen" id="lobby">
+    <div class="lobby">
+      <div class="card col">
+        <div class="label">Teams open this on their laptop</div>
+        <div class="join-url" id="joinUrl"></div>
+        <div class="label">Room code</div>
+        <div class="code" id="roomCode">----</div>
+        <div class="actions">
+          <button class="btn primary big" id="btnStartFirst">Start round 1</button>
+          <span class="muted" id="roundCount"></span>
+        </div>
+      </div>
+      <div class="card col">
+        <div class="label">Teams joined</div>
+        <div class="teams" id="lobbyTeams"></div>
+        <div class="muted" id="lobbyEmpty">Nobody yet. Teams appear here as soon as they join.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Round in progress -->
+  <section class="screen hidden" id="round">
+    <div class="split">
+      <div class="photo-stage"><img id="roundPhoto" alt="Where is this?"></div>
+      <aside class="side">
+        <div>
+          <div class="label">Round</div>
+          <div class="round-no" id="roundNo"></div>
+        </div>
+        <div class="timer" id="timer">--</div>
+        <div>
+          <div class="label" style="margin-bottom:8px">Guesses</div>
+          <div class="teams" id="roundTeams"></div>
+        </div>
+        <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px">
+          <button class="btn primary big" id="btnReveal">Reveal answer</button>
+          <button class="btn small" id="btnManual">Enter a guess by hand</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Reveal -->
+  <section class="screen hidden" id="reveal">
+    <div class="split">
+      <div id="revealMap" class="map"></div>
+      <aside class="side">
+        <div>
+          <div class="label" id="revealRoundLabel"></div>
+          <div class="answer" id="revealAnswer"></div>
+        </div>
+        <img class="thumb" id="revealThumb" alt="">
+        <div>
+          <div class="label" style="margin-bottom:8px">This round</div>
+          <div class="teams" id="revealResults"></div>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom:8px">Total</div>
+          <div class="teams" id="revealTotals"></div>
+        </div>
+        <div style="margin-top:auto">
+          <button class="btn primary big" id="btnNext" style="width:100%">Next round</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Final -->
+  <section class="screen hidden" id="final">
+    <div class="final">
+      <div class="label">Final scores</div>
+      <h1 id="winnerLine"></h1>
+      <div class="teams" id="finalTeams"></div>
+      <button class="btn" id="btnBackFromFinal">Back</button>
+    </div>
+  </section>
+
+  <!-- Scores overlay -->
+  <div class="overlay hidden" id="scoresOverlay">
+    <div class="dialog">
+      <h2>Scores so far</h2>
+      <div class="teams" id="overlayTeams"></div>
+      <div class="row"><button class="btn" data-close>Close</button></div>
+    </div>
+  </div>
+
+  <!-- Manual guess -->
+  <div class="overlay hidden" id="manualOverlay">
+    <div class="dialog">
+      <h2>Enter a guess by hand</h2>
+      <p class="muted" style="margin:0">Use this if a laptop can't connect. The team reads out the coordinates shown under their map.</p>
+      <label class="label" for="manualTeam">Team</label>
+      <select id="manualTeam"></select>
+      <input type="text" id="manualNewName" class="hidden" placeholder="New team name">
+      <label class="label" for="manualCoords">Coordinates</label>
+      <input type="text" id="manualCoords" placeholder="59.33012, 18.06581">
+      <div class="err" id="manualErr"></div>
+      <div class="row">
+        <button class="btn" data-close>Cancel</button>
+        <button class="btn primary" id="manualSave">Save guess</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/host.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stockholm Guessr · Locations</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Stockholm <b>Guessr</b> · Locations</div>
+    <div class="spacer"></div>
+    <a class="btn small" href="index.html" style="text-decoration:none">Home</a>
+  </div>
+  <section class="screen">
+    <div class="split">
+      <div id="map" class="map"></div>
+      <aside class="side">
+        <div>
+          <div class="label">Get coordinates</div>
+          <p class="muted" style="margin:6px 0 0">Click the exact spot where a photo was taken. Copy the line below into <code>config.js</code>.</p>
+        </div>
+        <div class="snippet" id="snippet">Click on the map…</div>
+        <button class="btn" id="btnCopy" disabled>Copy line</button>
+        <div>
+          <div class="label" style="margin-bottom:8px">Check your rounds</div>
+          <p class="muted" style="margin:0 0 8px">The numbered stars are the answers currently in <code>config.js</code>. Click one to see its photo.</p>
+          <div class="teams" id="roundList"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="config.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    (function () {
+      const { CFG, esc } = GQ;
+      const map = GQ.makeMap(document.getElementById("map"), "labels");
+      const next = CFG.rounds.length + 1;
+      let marker = null;
+      let line = "";
+
+      map.on("click", (e) => {
+        const lat = e.latlng.lat.toFixed(5);
+        const lng = e.latlng.lng.toFixed(5);
+        line = '{ photo: "photos/' + next + '.jpg", lat: ' + lat + ", lng: " + lng + ', answer: "" },';
+        document.getElementById("snippet").textContent = line;
+        document.getElementById("btnCopy").disabled = false;
+        if (marker) marker.setLatLng(e.latlng);
+        else marker = L.marker(e.latlng, { icon: GQ.pinIcon("#ef476f", "+") }).addTo(map);
+      });
+
+      document.getElementById("btnCopy").onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(line);
+          document.getElementById("btnCopy").textContent = "Copied ✓";
+          setTimeout(() => (document.getElementById("btnCopy").textContent = "Copy line"), 1500);
+        } catch (e) {
+          alert("Copy didn't work here. Select the text and copy it by hand.");
+        }
+      };
+
+      const list = document.getElementById("roundList");
+      const pts = [];
+      CFG.rounds.forEach((r, i) => {
+        const icon = L.divIcon({ className: "pin-wrap", html: '<div class="goal" style="width:34px;height:34px;font-size:15px;font-weight:900">' + (i + 1) + "</div>", iconSize: [34, 34], iconAnchor: [17, 17] });
+        const m = L.marker([r.lat, r.lng], { icon })
+          .bindPopup("<b>" + (i + 1) + ". " + esc(r.answer || "") + '</b><img class="popup-img" src="' + esc(r.photo) + '" alt="">')
+          .addTo(map);
+        pts.push([r.lat, r.lng]);
+        const row = document.createElement("div");
+        row.className = "team-row";
+        row.style.cursor = "pointer";
+        row.innerHTML = '<span class="rank" style="font-weight:900;color:var(--accent)">' + (i + 1) + '</span><span class="name">' + esc(r.answer || r.photo) + '</span><span class="meta">' + esc(r.photo) + "</span>";
+        row.onclick = () => { map.setView([r.lat, r.lng], 16); m.openPopup(); };
+        list.appendChild(row);
+      });
+      if (pts.length) map.fitBounds(pts, { padding: [60, 60] });
+    })();
+  </script>
+</body>
+</html>
