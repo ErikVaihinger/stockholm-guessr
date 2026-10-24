@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stockholm Guessr · Team</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Stockholm <b>Guessr</b></div>
+    <span class="status" id="status">not connected</span>
+    <div class="spacer"></div>
+    <span class="team-row hidden" id="teamBadge" style="padding:6px 12px"><span class="chip" id="teamChip" style="--c:var(--accent)"></span><span class="name" id="teamName"></span></span>
+    <span class="pts hidden" id="teamScore"></span>
+  </div>
+  <div class="banner hidden" id="banner"></div>
+
+  <!-- Join -->
+  <section id="join">
+    <div class="team-join">
+      <div class="card">
+        <h1>Join the game</h1>
+        <label class="label" for="inName">Team name</label>
+        <input type="text" id="inName" maxlength="24" placeholder="e.g. The Meatballs" autocomplete="off">
+        <label class="label" for="inRoom">Room code (on the TV)</label>
+        <input type="text" id="inRoom" maxlength="4" placeholder="ABCD" autocomplete="off" style="text-transform:uppercase; letter-spacing:.2em; font-weight:800">
+        <div class="err" id="joinErr"></div>
+        <button class="btn primary big" id="btnJoin">Join</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waiting -->
+  <section class="screen hidden" id="wait">
+    <div class="center-msg">
+      <div class="label" id="waitLabel">You're in</div>
+      <h2 id="waitTitle">Waiting for the host to start…</h2>
+      <p class="muted" id="waitSub">Keep this page open. The photo appears here when the round starts.</p>
+      <button class="btn small" id="btnLeave">Change team or room</button>
+    </div>
+  </section>
+
+  <!-- Playing -->
+  <section class="screen hidden" id="play">
+    <div class="play">
+      <div class="photo-stage" id="photoBox">
+        <img id="photo" alt="Where is this?">
+        <span class="hint">Click to enlarge</span>
+      </div>
+      <div class="map" id="map"></div>
+      <div class="bottombar">
+        <div>
+          <div class="label" id="roundLabel"></div>
+          <div class="timer" id="timer">--</div>
+        </div>
+        <div class="msg" id="msg"></div>
+        <button class="btn primary big" id="btnLock" disabled>Lock in guess</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="overlay lightbox hidden" id="lightbox"><img id="lightImg" alt=""></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/maplibre/maplibre-gl.js"></script>
+  <script src="vendor/maplibre/leaflet-maplibre-gl.js"></script>
+  <script src="config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/team.js"></script>
+</body>
+</html>
