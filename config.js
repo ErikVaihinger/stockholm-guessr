@@ -13,11 +13,11 @@
 
 window.QUIZ_CONFIG = {
   rounds: [
-    { photo: "photos/1.jpg", lat: 59.32750, lng: 18.05430, answer: "Stockholm City Hall (Stadshuset)" },
-    { photo: "photos/2.jpg", lat: 59.32500, lng: 18.07070, answer: "Stortorget, Gamla stan" },
-    { photo: "photos/3.jpg", lat: 59.33260, lng: 18.06490, answer: "Sergels torg" },
-    { photo: "photos/4.jpg", lat: 59.32800, lng: 18.09140, answer: "Vasa Museum" },
-    { photo: "photos/5.jpg", lat: 59.29360, lng: 18.08310, answer: "Avicii Arena (Globen)" },
+    { photo: "photos/1.JPG", lat: 59.32750, lng: 18.05430, answer: "Stockholm City Hall (Stadshuset)" },
+    { photo: "photos/2.JPG", lat: 59.32500, lng: 18.07070, answer: "Stortorget, Gamla stan" },
+    { photo: "photos/3.JPG", lat: 59.33260, lng: 18.06490, answer: "Sergels torg" },
+    { photo: "photos/4.JPG", lat: 59.32800, lng: 18.09140, answer: "Vasa Museum" },
+    { photo: "photos/5.JPG", lat: 59.29360, lng: 18.08310, answer: "Avicii Arena (Globen)" },
   ],
 
   // Seconds per round. The host can still reveal earlier or later.
