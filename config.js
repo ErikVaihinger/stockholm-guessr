@@ -17,7 +17,7 @@ window.QUIZ_CONFIG = {
     { photo: "photos/2.JPG", lat: 59.31508, lng: 18.07281, answer: "Medborgarplatsen MAX" },
     { photo: "photos/3.JPG", lat: 59.36615, lng: 18.05485, answer: "Frescati Campus" },
     { photo: "photos/4.JPG", lat: 59.33191, lng: 18.06355, answer: "T-Centralen" },
-    { photo: "photos/5.JPG", lat: 59.32023, lng: 18.05016, answer: "Södermalm Viewpoint" },
+    { photo: "photos/5.jpg", lat: 59.32023, lng: 18.05016, answer: "Södermalm Viewpoint" },
     { photo: "photos/6.JPG", lat: 59.32316, lng: 18.07280, answer: "Stockholm tightest alley" },
     { photo: "photos/7.JPG", lat: 59.32692, lng: 18.06516, answer: "Riksdagshuset" },
     { photo: "photos/8.JPG", lat: 59.32044, lng: 18.07289, answer: "Slussen" },
