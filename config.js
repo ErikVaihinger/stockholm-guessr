@@ -21,7 +21,7 @@ window.QUIZ_CONFIG = {
   ],
 
   // Seconds per round. The host can still reveal earlier or later.
-  roundSeconds: 90,
+  roundSeconds: 60,
 
   // Points by rank: closest team gets the first number, and so on.
   points: [3, 2, 1],
