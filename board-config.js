@@ -50,9 +50,9 @@ window.BOARD_CONFIG = {
     {
       name: "Whose Child?",
       questions: [
-        { type: "child", image: "board/child-easy", answer: "Name & Name" },
-        { type: "child", image: "board/child-medium", answer: "Name & Name" },
-        { type: "child", image: "board/child-hard", answer: "Name & Name" },
+        { type: "child", image: "board/child-easy", answer: "Nadine & Toon" },
+        { type: "child", image: "board/child-medium", answer: "Bia & Villads" },
+        { type: "child", image: "board/child-hard", answer: "Julie & Mauritius" },
       ],
     },
     {
