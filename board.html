@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz Board</title>
+  <style>
+    :root {
+      --bg: #0f1420;
+      --panel: #182033;
+      --panel-2: #212b42;
+      --line: #2e3a56;
+      --text: #eef2fa;
+      --muted: #9aa6c0;
+      --accent: #fbbf24;
+      --accent-ink: #1a1300;
+      --good: #34d399;
+      --good-bg: #0f3b2c;
+      --radius: 16px;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--bg); color: var(--text);
+      display: flex; flex-direction: column; height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; }
+    .hidden { display: none !important; }
+
+    .topbar {
+      flex: none; display: flex; align-items: center; gap: 16px;
+      padding: 12px 24px; border-bottom: 1px solid var(--line); background: var(--panel);
+    }
+    .brand { font-weight: 800; font-size: 1.15rem; letter-spacing: .02em; }
+    .brand b { color: var(--accent); }
+    .spacer { flex: 1; }
+    .btn {
+      border: 1px solid var(--line); background: var(--panel-2);
+      padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 600;
+    }
+    .btn:hover { border-color: var(--muted); }
+    .btn.small { padding: 6px 12px; font-size: .85rem; }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .btn.big { padding: 16px 36px; font-size: 1.3rem; border-radius: 12px; }
+    .hint { color: var(--muted); font-size: .85rem; }
+
+    /* ---------- board ---------- */
+    #board {
+      flex: 1; min-height: 0;
+      display: grid; gap: 14px; padding: 24px;
+      grid-template-rows: auto repeat(3, 1fr);
+    }
+    .cat {
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      font-weight: 800; font-size: clamp(1rem, 1.7vw, 1.6rem);
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 14px 8px; border-bottom: 3px solid var(--accent);
+    }
+    .tile {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      font-size: clamp(2.2rem, 5vw, 4.5rem); font-weight: 900; color: var(--accent);
+      cursor: pointer; transition: transform .12s, border-color .12s, background .12s;
+      min-height: 0;
+    }
+    .tile:hover { transform: translateY(-2px); border-color: var(--accent); background: var(--panel-2); }
+    .tile.done { color: #3b4763; background: #121828; border-style: dashed; }
+    .tile.done:hover { color: var(--muted); }
+
+    /* ---------- question ---------- */
+    #question { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    .q-head {
+      flex: none; display: flex; align-items: center; gap: 16px;
+      padding: 18px 28px 0;
+    }
+    .q-cat { text-transform: uppercase; letter-spacing: .12em; font-weight: 800; color: var(--muted); }
+    .q-pts {
+      background: var(--accent); color: var(--accent-ink); font-weight: 900;
+      border-radius: 999px; padding: 4px 14px;
+    }
+    .q-body {
+      flex: 1; min-height: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 28px; padding: 20px 40px;
+      text-align: center;
+    }
+    .q-text { font-size: clamp(1.6rem, 3vw, 2.8rem); font-weight: 800; line-height: 1.25; max-width: 1200px; }
+    .q-foot { flex: none; display: flex; justify-content: center; gap: 14px; padding: 0 28px 28px; align-items: center; }
+    .answer { font-size: clamp(2rem, 4vw, 3.6rem); font-weight: 900; color: var(--accent); }
+    .note { color: var(--muted); font-size: clamp(1rem, 1.4vw, 1.25rem); max-width: 1100px; }
+
+    .options { display: grid; gap: 16px; width: min(1200px, 100%); }
+    .options.four { grid-template-columns: 1fr 1fr; }
+    .options.three { grid-template-columns: repeat(3, 1fr); }
+    .opt {
+      display: flex; align-items: center; gap: 18px; text-align: left;
+      background: var(--panel); border: 2px solid var(--line); border-radius: var(--radius);
+      padding: 22px 26px; font-size: clamp(1.3rem, 2.2vw, 2rem); font-weight: 700;
+      transition: opacity .2s, background .2s, border-color .2s;
+    }
+    .opt .letter {
+      flex: none; width: 1.8em; height: 1.8em; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--panel-2); color: var(--accent); font-weight: 900;
+    }
+    .options.three .opt { flex-direction: column; text-align: center; justify-content: center; padding: 30px 20px; min-height: 220px; }
+    .opt .year { font-size: 1.4em; font-weight: 900; color: var(--muted); }
+    .revealed .opt { opacity: .35; }
+    .revealed .opt.right { opacity: 1; background: var(--good-bg); border-color: var(--good); }
+    .revealed .opt.right .letter { background: var(--good); color: #052e1f; }
+    .revealed .opt.right .year { color: var(--good); }
+
+    .emoji {
+      font-size: clamp(4rem, 12vw, 11rem); line-height: 1.1; letter-spacing: .08em;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+    .pic {
+      max-width: 100%; max-height: 62vh; object-fit: contain; display: block;
+      border-radius: 12px; background: #fff;
+    }
+    .pic.child { background: none; }
+    .missing {
+      width: min(700px, 90%); min-height: 300px; border: 3px dashed var(--line); border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      color: var(--muted); font-size: 1.2rem; padding: 20px;
+    }
+    .missing code { color: var(--text); font-size: 1.3rem; }
+
+    @media (max-width: 800px) {
+      #board { padding: 12px; gap: 8px; }
+      .options.four, .options.three { grid-template-columns: 1fr; }
+      .options.three .opt { min-height: 0; }
+      .q-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand" id="title"></div>
+    <div class="spacer"></div>
+    <span class="hint" id="keys"></span>
+    <button class="btn small" id="btnBack">Back to board</button>
+    <button class="btn small" id="btnReset">Reset board</button>
+  </div>
+
+  <main id="board"></main>
+
+  <section id="question" class="hidden">
+    <div class="q-head">
+      <span class="q-cat" id="qCat"></span>
+      <span class="q-pts" id="qPts"></span>
+    </div>
+    <div class="q-body" id="qBody"></div>
+    <div class="q-foot">
+      <button class="btn primary big" id="btnReveal">Reveal answer</button>
+    </div>
+  </section>
+
+  <script src="board-config.js"></script>
+  <script>
+    (function () {
+      const CFG = window.BOARD_CONFIG;
+      const $ = (id) => document.getElementById(id);
+      const KEY = "board_done_v1";
+      const EXTS = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG"];
+      const LEVELS = ["Easy", "Medium", "Hard"];
+
+      let done = {};
+      try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { done = {}; }
+      const save = () => { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} };
+
+      let open = null; // { c, q, revealed }
+
+      const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+      const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+
+      // Loads "board/logo-easy-zoom" by trying each file ending in turn.
+      function image(base, cls) {
+        const wrap = el("div");
+        const img = el("img", "pic " + (cls || ""));
+        img.alt = "";
+        const hasExt = /\.[a-z0-9]{3,4}$/i.test(base);
+        const stem = hasExt ? base.replace(/\.[a-z0-9]{3,4}$/i, "") : base;
+        const tries = (hasExt ? [base] : []).concat(EXTS.map((x) => stem + "." + x));
+        let i = 0;
+        img.onerror = () => {
+          i++;
+          if (i < tries.length) img.src = tries[i];
+          else wrap.replaceChildren(el("div", "missing", "Image not found. Upload<br><code>" + esc(stem) + ".jpg</code>(or .png)"));
+        };
+        img.src = tries[0];
+        wrap.appendChild(img);
+        return wrap;
+      }
+
+      // ---------- board ----------
+      function renderBoard() {
+        const b = $("board");
+        b.innerHTML = "";
+        b.style.gridTemplateColumns = "repeat(" + CFG.categories.length + ", minmax(0, 1fr))";
+        CFG.categories.forEach((cat) => b.appendChild(el("div", "cat", esc(cat.name))));
+        for (let q = 0; q < 3; q++) {
+          CFG.categories.forEach((cat, c) => {
+            const t = el("button", "tile" + (done[c + "-" + q] ? " done" : ""), String(q + 1));
+            t.dataset.c = c;
+            t.dataset.q = q;
+            t.title = cat.name + " · " + LEVELS[q];
+            if (!cat.questions[q]) t.disabled = true;
+            t.onclick = () => openQ(c, q);
+            b.appendChild(t);
+          });
+        }
+      }
+
+      function showBoard() {
+        open = null;
+        $("question").classList.add("hidden");
+        $("board").classList.remove("hidden");
+        $("btnBack").classList.add("hidden");
+        $("btnReset").classList.remove("hidden");
+        $("keys").textContent = "";
+        renderBoard();
+      }
+
+      // ---------- question ----------
+      function openQ(c, q) {
+        open = { c, q, revealed: false };
+        const cat = CFG.categories[c];
+        $("qCat").textContent = cat.name + " · " + LEVELS[q];
+        $("qPts").textContent = (q + 1) + (q === 0 ? " point" : " points");
+        $("board").classList.add("hidden");
+        $("question").classList.remove("hidden");
+        $("btnBack").classList.remove("hidden");
+        $("btnReset").classList.add("hidden");
+        $("btnReveal").classList.remove("hidden");
+        $("keys").textContent = "Space = reveal, then back · Esc = back";
+        drawQ();
+      }
+
+      function drawQ() {
+        const { c, q, revealed } = open;
+        const Q = CFG.categories[c].questions[q];
+        const body = $("qBody");
+        body.innerHTML = "";
+        body.classList.toggle("revealed", revealed);
+
+        if (Q.type === "choice") {
+          body.appendChild(el("div", "q-text", esc(Q.question)));
+          const box = el("div", "options " + (Q.options.length === 3 ? "three" : "four"));
+          Q.options.forEach((o, i) => {
+            const opt = el("div", "opt" + (i + 1 === Q.correct ? " right" : ""), '<span class="letter">' + "ABCD"[i] + "</span><span>" + esc(o) + "</span>");
+            box.appendChild(opt);
+          });
+          body.appendChild(box);
+        } else if (Q.type === "oldest") {
+          body.appendChild(el("div", "q-text", esc(Q.question || "Which is the oldest?")));
+          const box = el("div", "options three");
+          Q.options.forEach((o, i) => {
+            const opt = el("div", "opt" + (i + 1 === Q.correct ? " right" : ""),
+              '<span class="letter">' + "ABC"[i] + "</span><span>" + esc(o.name) + "</span>" + (revealed ? '<span class="year">' + esc(o.year) + "</span>" : ""));
+            box.appendChild(opt);
+          });
+          body.appendChild(box);
+        } else if (Q.type === "logo") {
+          body.appendChild(el("div", "q-text", revealed ? "" : "Which brand is this?"));
+          body.appendChild(image(revealed ? Q.full : Q.zoomed));
+          if (revealed) body.appendChild(el("div", "answer", esc(Q.answer)));
+        } else if (Q.type === "child") {
+          body.appendChild(el("div", "q-text", "Who are the parents?"));
+          body.appendChild(image(Q.image, "child"));
+          if (revealed) body.appendChild(el("div", "answer", esc(Q.answer)));
+        } else if (Q.type === "emoji") {
+          body.appendChild(el("div", "q-text", "Which country?"));
+          body.appendChild(el("div", "emoji", esc(Q.emoji)));
+          if (revealed) body.appendChild(el("div", "answer", esc(Q.answer)));
+        }
+        if (revealed && Q.note) body.appendChild(el("div", "note", esc(Q.note)));
+        // drop the empty heading on logo reveal
+        body.querySelectorAll(".q-text").forEach((n) => { if (!n.textContent) n.remove(); });
+        $("btnReveal").classList.toggle("hidden", revealed);
+      }
+
+      function reveal() {
+        if (!open || open.revealed) return;
+        open.revealed = true;
+        done[open.c + "-" + open.q] = true;
+        save();
+        drawQ();
+      }
+
+      // ---------- wiring ----------
+      $("title").innerHTML = esc(CFG.title).replace(/(\S+)$/, "<b>$1</b>");
+      document.title = CFG.title;
+      $("btnReveal").onclick = reveal;
+      $("btnBack").onclick = showBoard;
+      $("btnReset").onclick = () => {
+        if (!confirm("Mark all questions as not played?")) return;
+        done = {};
+        save();
+        renderBoard();
+      };
+      document.addEventListener("keydown", (e) => {
+        if (!open) return;
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (!open.revealed) reveal(); else showBoard(); }
+        else if (e.key === "Escape" || e.key === "Backspace") { e.preventDefault(); showBoard(); }
+      });
+
+      showBoard();
+    })();
+  </script>
+</body>
+</html>
