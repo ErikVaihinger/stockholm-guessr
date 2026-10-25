@@ -13,11 +13,16 @@
 
 window.QUIZ_CONFIG = {
   rounds: [
-    { photo: "photos/1.JPG", lat: 59.32750, lng: 18.05430, answer: "Stockholm City Hall (Stadshuset)" },
-    { photo: "photos/2.JPG", lat: 59.32500, lng: 18.07070, answer: "Stortorget, Gamla stan" },
-    { photo: "photos/3.JPG", lat: 59.33260, lng: 18.06490, answer: "Sergels torg" },
-    { photo: "photos/4.JPG", lat: 59.32800, lng: 18.09140, answer: "Vasa Museum" },
-    { photo: "photos/5.JPG", lat: 59.29360, lng: 18.08310, answer: "Avicii Arena (Globen)" },
+    { photo: "photos/1.JPG", lat: 59.26925, lng: 18.05517, answer: "Best WG in all of Stockholm" },
+    { photo: "photos/2.JPG", lat: 59.31508, lng: 18.07281, answer: "Medborgarplatsen MAX" },
+    { photo: "photos/3.JPG", lat: 59.36615, lng: 18.05485, answer: "Frescati Campus" },
+    { photo: "photos/4.JPG", lat: 59.33191, lng: 18.06355, answer: "T-Centralen" },
+    { photo: "photos/5.JPG", lat: 59.32023, lng: 18.05016, answer: "Södermalm Viewpoint" },
+    { photo: "photos/6.JPG", lat: 59.32316, lng: 18.07280, answer: "Stockholm tightest alley" },
+    { photo: "photos/7.JPG", lat: 59.32692, lng: 18.06516, answer: "Riksdagshuset" },
+    { photo: "photos/8.JPG", lat: 59.32044, lng: 18.07289, answer: "Slussen" },
+    { photo: "photos/9.JPG", lat: 59.35656, lng: 18.05544, answer: "Albano Bus Stop" },
+    { photo: "photos/10.JPG", lat: 59.34282, lng: 18.05016, answer: "Odenplan" },
   ],
 
   // Seconds per round. The host can still reveal earlier or later.
