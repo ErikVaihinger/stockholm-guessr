@@ -42,9 +42,9 @@ window.BOARD_CONFIG = {
     {
       name: "Zoomed Logos",
       questions: [
-        { type: "logo", zoomed: "board/logo-easy-zoom", full: "board/logo-easy-full", answer: "Nike" },
-        { type: "logo", zoomed: "board/logo-medium-zoom", full: "board/logo-medium-full", answer: "Lidl" },
-        { type: "logo", zoomed: "board/logo-hard-zoom", full: "board/logo-hard-full", answer: "Systembolaget" },
+        { type: "logo", zoomed: "board/logo-easy-zoom", full: "board/logo-easy-full", answer: "Pepsi" },
+        { type: "logo", zoomed: "board/logo-medium-zoom", full: "board/logo-medium-full", answer: "UniQlo" },
+        { type: "logo", zoomed: "board/logo-hard-zoom", full: "board/logo-hard-full", answer: "Louis Vuitton" },
       ],
     },
     {
